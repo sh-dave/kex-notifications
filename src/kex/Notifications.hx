@@ -1,8 +1,6 @@
 package kex;
 
 import kex.Notification;
-import kex.text.TextLayout;
-import kex.text.TextLayouter;
 
 typedef NotificationUiOpts = {
 	public var font: kha.Font;
