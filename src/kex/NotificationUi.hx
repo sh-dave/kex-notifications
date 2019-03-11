@@ -1,6 +1,7 @@
 package kex;
 
 import kex.Notification;
+import kha.graphics2.Graphics;
 
 typedef NotificationUiOpts = {
 	public var font: kha.Font;
@@ -30,18 +31,22 @@ class NotificationUi {
 	public function render( canvas: kha.Canvas ) {
 		var g2 = canvas.g2;
 		g2.begin(false);
-			for (n in notifications) {
-				if (n.active) {
-					drawMessageContent(g2, n);
-				}
-			}
+			draw(g2);
 		g2.end();
+	}
+
+	public function draw( g2: Graphics ) {
+		for (n in notifications) {
+			if (n.active) {
+				drawMessageContent(g2, n);
+			}
+		}
 	}
 
 	function prepare( n: Notification, message: String )
 		n.layout(font, message);
 
-	function drawMessageContent( g2: kha.graphics2.Graphics, n: Notification ) {
+	function drawMessageContent( g2: Graphics, n: Notification ) {
 		var content = n.content;
 		var ww = kha.System.windowWidth();
 		var wh = kha.System.windowHeight();

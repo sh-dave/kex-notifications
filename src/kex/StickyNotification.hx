@@ -1,7 +1,7 @@
 package kex;
 
 import kex.Notification;
-import kex.Notifications;
+import kex.NotificationUi;
 
 class StickyNotification extends Notification {
 	var nui: NotificationUi;
