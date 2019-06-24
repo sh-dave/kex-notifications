@@ -1,10 +1,12 @@
 package kex;
 
 import kex.Notification;
+import kha.Canvas;
+import kha.Font;
 import kha.graphics2.Graphics;
 
 typedef NotificationUiOpts = {
-	public var font: kha.Font;
+	final font: Font;
 }
 
 class NotificationUi {
@@ -12,7 +14,7 @@ class NotificationUi {
 		this.font = opts.font;
 	}
 
-	var font: kha.Font;
+	var font: Font;
 	var notifications: Array<Notification> = [];
 
 	public function error( message: String ) {
@@ -28,17 +30,17 @@ class NotificationUi {
 		return n;
 	}
 
-	public function render( canvas: kha.Canvas ) {
+	public function render( canvas: Canvas ) {
 		var g2 = canvas.g2;
 		g2.begin(false);
-			draw(g2);
+			draw(g2, canvas.width, canvas.height);
 		g2.end();
 	}
 
-	public function draw( g2: Graphics ) {
+	function draw( g2: Graphics, w, h ) {
 		for (n in notifications) {
 			if (n.active) {
-				drawMessageContent(g2, n);
+				drawMessageContent(g2, w, h, n);
 			}
 		}
 	}
@@ -46,14 +48,12 @@ class NotificationUi {
 	function prepare( n: Notification, message: String )
 		n.layout(font, message);
 
-	function drawMessageContent( g2: Graphics, n: Notification ) {
+	function drawMessageContent( g2: Graphics, ww, wh, n: Notification ) {
 		var content = n.content;
-		var ww = kha.System.windowWidth();
-		var wh = kha.System.windowHeight();
 		var height = content.height;
 		var top = (wh - height) * 0.5;
-		var y = 0.0; // TODO (DK) better name
-		var x = (ww - content.width) * 0.5; // TODO (DK) better name
+		var y = 0.0;
+		var x = (ww - content.width) * 0.5;
 
 		g2.color = n.colorScheme.hlColor;
 		g2.fillRect(0, top, ww, 1);
