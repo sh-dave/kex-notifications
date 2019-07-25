@@ -12,12 +12,18 @@ class StickyNotification extends Notification {
 	}
 
 	public function alert( message: String ) {
-		trace('[alert] $message');
+		if (nui.traceErrors) {
+			trace('[alert] $message');
+		}
+
 		@:privateAccess nui.prepare(this, message);
 	}
 
 	public function resolve() {
-		trace('[/alert] $message');
+		if (nui.traceErrors) {
+			trace('[/alert] $message');
+		}
+
 		active = false;
 	}
 }

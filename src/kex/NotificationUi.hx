@@ -7,18 +7,25 @@ import kha.graphics2.Graphics;
 
 typedef NotificationUiOpts = {
 	final font: Font;
+	final traceErrors: Bool;
 }
 
 class NotificationUi {
+	public final traceErrors: Bool;
+
 	public function new( opts: NotificationUiOpts ) {
 		this.font = opts.font;
+		this.traceErrors = opts.traceErrors;
 	}
 
 	var font: Font;
 	var notifications: Array<Notification> = [];
 
 	public function error( message: String ) {
-		trace('[ERROR]: $message');
+		if (traceErrors) {
+			trace('[ERROR]: $message');
+		}
+
 		var n = new Notification({ colorScheme: Notification.ErrorColorScheme });
 		prepare(n, message);
 		notifications.push(n);
