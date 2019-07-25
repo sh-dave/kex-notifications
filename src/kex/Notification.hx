@@ -1,10 +1,13 @@
 package kex;
 
+import haxe.ds.Option;
 import kex.text.TextLayout;
 import kex.text.TextLayouter;
 
 typedef NotificationOpts = {
-	colorScheme: ColorScheme,
+	final colorScheme: ColorScheme;
+	final fontSize: Int;
+	final ?traceErrors: Bool;
 }
 
 class Notification {
@@ -14,29 +17,29 @@ class Notification {
 		shadowColor: kha.Color.fromBytes(0x80, 0x00, 0x00, 0xff),
 	}
 
-	public var content(default, null): TextLayout;
+	public var content(default, null): Option<TextLayout> = None;
 	public var active(default, null) = false;
 	public var colorScheme(default, null): ColorScheme;
+	public final fontSize: Int;
 
-	public var fontSize = 24; // TODO (DK) via config; not public
-
+	var traceErrors: Bool;
 	var message: String;
 
-	public function new( opts: NotificationOpts ) {
+	public function new( message: String, opts: NotificationOpts ) {
+		this.message = message;
 		this.colorScheme = opts.colorScheme;
+		this.fontSize = opts.fontSize;
+		this.active = true;
+		this.traceErrors = opts.traceErrors;
 	}
 
-	public function layout( font: kha.Font, message: String ) {
-		this.message = message;
-
-		var areaWidth = kha.System.windowWidth() * 0.8; // TODO (DK) via config
-
+	public function layout( font: kha.Font, maxWidth: Int ) {
 		var fontInfo = {
 			width: font.width.bind(fontSize, _),
 			height: font.height.bind(fontSize),
-		} // TODO (DK) via config
+		}
 
-		this.content = new TextLayouter().layout(message, fontInfo, areaWidth);
+		this.content = Some(new TextLayouter({ maxCharactersPerLine: 120 }).layout(message, fontInfo, maxWidth));
 		active = true;
 		return this;
 	}
