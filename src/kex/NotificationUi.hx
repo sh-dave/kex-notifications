@@ -38,9 +38,12 @@ class NotificationUi {
 	}
 
 	function draw( g2: Graphics, w, h ) {
+		var y = 4.0;
+
 		for (n in notifications) {
 			if (n.active) {
-				drawMessageContent(g2, w, h, n);
+				y = drawMessageContent(g2, w, h, y, n);
+				y += 4;
 			}
 		}
 	}
@@ -48,28 +51,27 @@ class NotificationUi {
 	function prepare( n: Notification, message: String )
 		n.layout(font, message);
 
-	function drawMessageContent( g2: Graphics, ww, wh, n: Notification ) {
+	function drawMessageContent( g2: Graphics, ww, wh, y, n: Notification ) : Float {
 		var content = n.content;
 		var height = content.height;
-		var top = (wh - height) * 0.5;
-		var y = 0.0;
 		var x = (ww - content.width) * 0.5;
 
 		g2.color = n.colorScheme.hlColor;
-		g2.fillRect(0, top, ww, 1);
+		g2.fillRect(0, y, ww, 1);
 		g2.color = n.colorScheme.bgColor;
-		g2.fillRect(0, top + 1, ww, height);
+		g2.fillRect(0, y + 1, ww, height);
 		g2.color = n.colorScheme.shadowColor;
-		g2.fillRect(0, top + height + 1, ww, 1);
+		g2.fillRect(0, y + height + 1, ww, 1);
 		g2.color = kha.Color.White;
 		g2.font = font;
 		g2.fontSize = n.fontSize;
 
 		for (i in 0...content.lines.length) {
 			var line = content.lines[i];
-			var lineTop = top + y;
-			g2.drawString(line.content, x, lineTop);
+			g2.drawString(line.content, x, y);
 			y += content.lineHeight;
 		}
+
+		return y;
 	}
 }
