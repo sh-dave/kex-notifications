@@ -129,11 +129,11 @@ class NotificationUi {
 	}
 
 	function layout( n: Notification, font: Font, maxWidth: Int ) {
-		var fontInfo = {
-			width: font.width.bind(fontSize, _),
-			height: font.height.bind(fontSize),
+		final fontmetrics = {
+			measureWidth: font.width.bind(fontSize, _),
+			measureHeight: font.height.bind(fontSize),
 		}
 
-		n.content = Some(new TextLayouter({ maxCharactersPerLine: maxCharactersPerLine }).layout(n.message, fontInfo, maxWidth));
+		n.content = Some(TextLayouter.layout(n.message, fontmetrics, maxWidth, { maxCharactersPerLine: maxCharactersPerLine }));
 	}
 }
